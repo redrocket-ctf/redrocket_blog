@@ -4,7 +4,7 @@ category: Crypto
 author: Heini123
 ---
 
-This is an example post!
+This is an example post:
 
 ```python
 import os
