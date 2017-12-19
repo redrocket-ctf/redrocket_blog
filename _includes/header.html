@@ -12,7 +12,13 @@
           {% assign url = link.url | relative_url %}
         {% endif %}
         <a class="page-link" href="{{ url }}">{{ link.title }}</a>
+        {% endfor %}[ 
+      {% for archive in site.archives %}
+        {% if archive.type == "category" %}
+          <a class="page-link" href="{{ archive.url | relative_url }}">{{ archive.title | escape }}</a>
+        {% endif %}
       {% endfor %}
+      ]
     </nav>
 
   </div>
