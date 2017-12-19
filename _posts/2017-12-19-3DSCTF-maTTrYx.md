@@ -8,7 +8,7 @@ tags:
 
 When connecting to the challenge we were greeted with a matrix like animation.
 
-![m1](http://blog.redrocket.club/assets/img/3ds_matty1.png)
+![m1](/assets/img/3ds_matty1.png)
 
 I first tried to find some hidden messages in the printed chars. I did:
 * Check the distance between chars
@@ -38,8 +38,8 @@ if __name__ == '__main__':
 ```
 Aaaand we got a crash after a few seconds. And a base64 encoded string.
 ![m1](http://blog.redrocket.club/assets/img/3ds_matty2.png)
-It turns out that the base64 string decodes to '3DS{M3rRy_ChR', wich is the beginning of a flag.
-Okay I see we probably send some control characters and for some reason it crashed and gave us a part of the flag.
+It turns out that the base64 string decodes to `3DS{M3rRy_ChR`, wich is the beginning of a flag.
+Okay, I see... We probably send some control characters and for some reason it crashed and gave us a part of the flag.
 We now could investigate more and look wich secquence caused the crash, but I had an even better Idea. Just crash it a few more times.
 Finally we got three different base64 encoded strings wich, decrypted and concaternated, resulted in the flag:
 
