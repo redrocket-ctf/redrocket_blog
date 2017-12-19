@@ -4,7 +4,6 @@ category: Crypto
 author: Heini123
 ---
 
-
 This is an example post:
 
 ```python
