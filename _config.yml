@@ -25,6 +25,7 @@ exclude:
   - Gemfile.lock
   - Rakefile
   - README.md
+  - post_template.md
   - LICENSE.txt
   - CHANGELOG.md
   - jekyll-whiteglass.gemspec
