@@ -1,7 +1,8 @@
 ---
 layout: post
 category: Crypto
-author: Heini123
+tags:
+    - rg
 ---
 
 This is an example post:

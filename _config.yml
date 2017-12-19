@@ -68,6 +68,8 @@ kramdown:
 jekyll-archives:
   enabled:
     - categories
-  layout: category_archives
+    - tags
+  layout: archive
   permalinks:
     category: /categories/:name/
+    tag: /author/:name/
