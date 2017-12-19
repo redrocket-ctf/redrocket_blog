@@ -1,4 +1,9 @@
+{% if post %}
 {{ post.date | date: "%b %-d, %Y" }}
+{% endif %}
+{% if page %}
+{{ page.date | date: "%b %-d, %Y" }}
+{% endif %}
 {% if include.categories %}
 •
 {% for category in include.categories %}
