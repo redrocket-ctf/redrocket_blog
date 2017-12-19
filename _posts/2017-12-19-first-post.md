@@ -3,8 +3,6 @@ layout: post
 category: Crypto
 tags:
     - rg
-    - homo
-    - lol
 ---
 
 This is an example post:
