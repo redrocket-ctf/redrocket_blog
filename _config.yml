@@ -72,4 +72,4 @@ jekyll-archives:
   layout: archive
   permalinks:
     category: /categories/:name/
-    tag: /author/:name/
+    tag: /tag/:name/
