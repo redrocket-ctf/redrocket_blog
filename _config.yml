@@ -37,7 +37,7 @@ twitter_username:
 twitter_image:
 facebook_app_id:
 facebook_image:
-google_analytics:
+google_analytics: false
 comments: false
 
 # Plugins
