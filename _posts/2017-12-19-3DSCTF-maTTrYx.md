@@ -1,7 +1,8 @@
 ---
 layout: post
 category: Misc
-author: kowu
+tags: 
+    - kowu
 ---
 
 When connectiong to the challenge we were greeted with a matrix like animation.
