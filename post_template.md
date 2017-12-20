@@ -15,3 +15,14 @@ Code:
 ```python
 input()
 ```
+
+Math:
+
+{% katex %}
+c = \pm\sqrt{a^2 + b^2}
+{% endkatex %}
+
+Math centered big:
+{% katex display %}
+c = \pm\sqrt{a^2 + b^2}
+{% endkatex %}
