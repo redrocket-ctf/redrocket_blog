@@ -37,7 +37,7 @@ if __name__ == '__main__':
         print(r.recvline())
 ```
 Aaaand we got a crash after a few seconds. And a base64 encoded string.
-![m1](http://blog.redrocket.club/assets/img/3ds_matty2.png)
+![m1](/assets/img/3ds_matty2.png)
 It turns out that the base64 string decodes to `3DS{M3rRy_ChR`, wich is the beginning of a flag.
 Okay, I see... We probably send some control characters and for some reason it crashed and gave us a part of the flag.
 We now could investigate more and look wich secquence caused the crash, but I had an even better Idea. Just crash it a few more times.
