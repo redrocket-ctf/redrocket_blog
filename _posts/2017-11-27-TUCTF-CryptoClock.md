@@ -95,12 +95,11 @@ offset = random.randint(big_1,big_2)
 
 The service also offers us the RSA encrypted seed `enc_time = pow(time,keys['e'],keys['n'])`. Important here ist that we can request as many `enc_time`'s with the same secret offset as we want. Because of that we could probably request a couple of cipher texts and then calculate the seed. 
 
-More interesting though: this is a pitch perfect example of a related cipher text vulnerablility. Since the point of CTFs is to learn we decided to go into that direction.
+More interesting though: this is a pitch perfect example of a related cipher text vulnerablility. Since the point of CTFs is to learn, we decided to go into that direction.
 
 A practical attack for this scenario is the [Franklin Reiter Related Message Attack](http://crypto.stanford.edu/~dabo/pubs/papers/RSA-survey.pdf).
 
-Franklin and Reiter stated that, given an RSA public key {% katex %}
-N = \langle N, e \rangle
+Franklin and Reiter stated that, given an RSA public key {% katex %} \langle N, e \rangle
 {% endkatex %} with low exponent (such as 3 in this case) and two related plain texts
 {% katex %}M_1 \neq M_2 \in Z_{N}^{\ast}{% endkatex %} that satisfy {% katex %}M_1 \equiv f(M_2) \pmod{N}{% endkatex %} with linear {% katex %}f = ax + b, b \neq 0{% endkatex %} we can recover the plaintext in {% katex %}log N{% endkatex %}. 
 
@@ -113,7 +112,7 @@ This means, to find {% katex %} M_2 {% endkatex %} we have to compute {% katex %
 
 Unfortunately I didn't find any Python code for calculating the GCD for a ring over a composite modulus. I was half way through writing the eea for polynomials over a ring myself when I stumpled upon the nifty ```Poly.set_modulus``` method in [sympys polynomials implementation](http://docs.sympy.org/latest/modules/polys/reference.html) that does exactly what is needed here.
 
-Using that the exploit is rather short, we can use sympys `gcd` function:
+Using that, the exploit is rather short. We can use sympys `gcd` function:
 
 ```python
 f1 = poly(x**e - c1).set_modulus(n)
