@@ -121,7 +121,7 @@ f2 = poly((x + 1)**e - c2).set_modulus(n)
 -gcd(f1, f2).coeffs()[-1]  # sympy is awesome!
 ```
 
-We take the negated last coefficient of the resulting term ({% katex %} x-M_2 {% endkatex %}), which is our plain text string.
+We take the negated last coefficient of the resulting term ({% katex %} x-M_2 {% endkatex %}), which is our plain text string {% katex %} M_2 {% endkatex %}.
 
 After receiving the plain text, which is used as seed, we can compute the next random number.
 
