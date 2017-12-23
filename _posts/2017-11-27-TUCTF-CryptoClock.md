@@ -110,7 +110,7 @@ Given all this we can create the two polynomials {% katex %}g_1(x) = f(x)^e - C_
 
 This means, to find {% katex %} M_2 {% endkatex %} we have to compute the {% katex %}gcd(g_1, g_2){% endkatex %} giving us the common factor {% katex %} x-M_2 {% endkatex %}. To see why this always works for the exponent 3 (and mostly for other small exponents) see the mentioned paper.
 
-Unfortunately I didn't find any Python code for calculating the GCD for a ring over a composite modulus. I was half way through writing the eea for polynomials over a ring myself when I stumpled upon the nifty ```Poly.set_modulus``` method in [sympys polynomials implementation](http://docs.sympy.org/latest/modules/polys/reference.html) that does exactly what is needed here.
+Unfortunately I didn't find any Python code for calculating the GCD for a ring over a composite modulus. I was half way through writing the eea for polynomials over a ring myself when I stumpled upon the nifty ```Poly.set_modulus``` method in [sympy's polynomials implementation](http://docs.sympy.org/latest/modules/polys/reference.html) that does exactly what is needed here.
 
 Using that, the exploit is rather short. We can use sympys `gcd` function:
 
