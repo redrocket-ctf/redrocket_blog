@@ -125,7 +125,7 @@ We take the negated last coefficient of the resulting term ({% katex %} x-M_2 {%
 
 After receiving the plain text, which is used as seed, we can compute the next random number.
 
-After way too much time of running the exploit locally and failing remotely, I realized that the server side used Python 2. The PRNG implementations between Python 2 (LCG) and Python 3 (Mersenne-Twister) do not have much in common.
+After way too much time of running the exploit locally and failing remotely, I realized that the server side is using Python 2. The PRNG implementations between Python 2 (LCG) and Python 3 (Mersenne-Twister) do not have much in common.
 
 The final exploit looks like this:
 
