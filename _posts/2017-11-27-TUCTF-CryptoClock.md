@@ -106,10 +106,9 @@ Franklin and Reiter stated that, given an RSA public key {% katex %} \langle N, 
 This is obviously given here, since we can wait one second between requesting the cipher texts, so in our case it is {% katex %}f = x + 1{% endkatex %}. 
 
 Given all this we can create the two polynomials {% katex %}g_1(x) = f(x)^e - C_1 \in \mathbb{Z}_N{% endkatex %} and {% katex %}g_2(x) = x^e - C_2 \in \mathbb{Z}_N{% endkatex %}.
+{% katex %} M_2 {% endkatex %} is a root of both polynomials, so {% katex %} x-M_2 {% endkatex %} divides them both.
 
-Now {% katex %} M_2 {% endkatex %} is a root of both polynomials, so {% katex %} x-M_2 {% endkatex %} divides them both.
-
-This means, to find {% katex %} M_2 {% endkatex %} we have to compute {% katex %}gcd(g_1, g_2){% endkatex %} giving us the common factor {% katex %} x-M_2 {% endkatex %}.
+This means, to find {% katex %} M_2 {% endkatex %} we have to compute the {% katex %}gcd(g_1, g_2){% endkatex %} giving us the common factor {% katex %} x-M_2 {% endkatex %}. To see why this always works for the exponent 3 (and mostly for other small exponents) see the mentioned paper.
 
 Unfortunately I didn't find any Python code for calculating the GCD for a ring over a composite modulus. I was half way through writing the eea for polynomials over a ring myself when I stumpled upon the nifty ```Poly.set_modulus``` method in [sympys polynomials implementation](http://docs.sympy.org/latest/modules/polys/reference.html) that does exactly what is needed here.
 
