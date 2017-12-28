@@ -51,7 +51,7 @@ if obj['admin']:
     print('The flag is: {}'.format(open('flag.txt').read().strip()))
 ```
 
-The program tries to implement an authenticated encryption system using AES-128 in counter mode using a CRC-32 "MAC", a random 16 bytes MAC key and a random 16 bytes encryption key.
+The program tries to implement an authenticated encryption system using AES-128 in counter mode, a CRC-32 "MAC", a random 16 bytes MAC key and a random 16 bytes encryption key.
 
 The service issues an encrypted version of the JSON object ```{'admin': 0}```. The goal is, to change the value of the admin attribute to something that is true in Python terms. In other words: we have to manipulating the given cipher text to decrypt to ```{'admin': 1}```.
 
