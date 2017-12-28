@@ -51,17 +51,19 @@ if obj['admin']:
     print('The flag is: {}'.format(open('flag.txt').read().strip()))
 ```
 
-This code tries to implement an authenticated encryption system using AES-128 in counter mode using a CRC-32 "MAC", a random 16 bytes MAC key and a random 16 bytes encryption key.
+The program tries to implement an authenticated encryption system using AES-128 in counter mode using a CRC-32 "MAC", a random 16 bytes MAC key and a random 16 bytes encryption key.
 
-The service issues an encrypted version of the JSON object ```{'admin': 0}```. The goal is, to change the value of the object to something that evaluates to true in Python, e.g. ```{'admin': 1}``` by manipulating the given cipher text.
+The service issues an encrypted version of the JSON object ```{'admin': 0}```. The goal is, to change the value of the admin attribute to something that is true in Python terms. In other words: we have to manipulating the given cipher text to decrypt to ```{'admin': 1}```.
 
 Since the encryption is done in CTR mode and we know the encrypted string, changing the 0 to 1 is fairly easy. 
 
-In [counter mode](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#CTR), the encryption of plaintext P works by XORing the output of the AES encryption with key K and the counter value CTR (typically a nonce and an acutal counter counting upwards from 0):{% katex %}C_i = P_i \oplus E_K(CTR_i){% endkatex %}. The decryption works analog: {% katex %}P_i = C_i \oplus E_K(CTR_i){% endkatex %}.
+In [counter mode](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#CTR), the encryption of plaintext P works by XORing the output of the AES encryption with key K and the counter value CTR:{% katex %}C_i = P_i \oplus E_K(CTR_i){% endkatex %}. 
 
-This means that, given a ciphertext, we can change the values in the resulting decrypted text just by XORing the bits we want to flip (here X) with the ciphertext. The decryption then does {% katex %}P'_i = C_i \oplus X \oplus E(K, CTR_i){% endkatex %}, resulting in an attacker controlled plaintext.
+The decryption works analogously: {% katex %}P_i = C_i \oplus E_K(CTR_i){% endkatex %}.
 
-So, to change the value of the plaintext in this task from ASCII 0 to ASCII 1, we just need to flip the corresponding bit in the cipher text. In our case, thats the last bit of the eleventh byte. Doing that in Python is simple:
+This means that, given a ciphertext, we can change the values in the resulting decrypted text just by XORing the bits we want to flip (here X) with the ciphertext. The decryption then proceeds as {% katex %}P'_i = C_i \oplus X \oplus E_K(CTR_i){% endkatex %}, resulting in an attacker controlled plaintext.
+
+To change the value of the plaintext in this task from ASCII 0 to ASCII 1, we just need to flip the corresponding bit in the cipher text. In our case, thats the last bit of the eleventh byte. Doing that in Python is simple:
 
 ```python
 import binascii
@@ -77,9 +79,9 @@ print(binascii.hexlify(b_str))
 
 This is equivalent to XORing the given ciphertext with the same length byte string X: 
 
-```X = 0x0000000000000000000001000000000000000000000000000000000000000000```.
+```X = 0x00000000000000000000010000000000000000000000000000000000```.
 
-The next problem is, that the service checks the decrypted strings for modification by evaluating the CRC-32 sum and checking the MAC key for modifications in the decryption routine:
+The next problem is, that the service checks decrypted strings for modification by evaluating the CRC-32 sum and checking the MAC key for modifications in the decryption routine:
 
 ```python
 def authdec(c):
@@ -92,7 +94,7 @@ def authdec(c):
 
 Fortunately, CRC values are a very bad choice for implementing authenticated encryption. Most CRCs, such as CRC-32, work by using the bits of data as coefficients for binary polynomials. Those polynomials are divided by a specified binary generator polynomial, the remainder of this division then becomes the result. This makes CRC a linear function with respect to XOR: {% katex %}crc(a \oplus b)  = crc(a) \oplus crc(b){% endkatex %}.
 
-In this task we can use this property, since we can compute the CRC-32 value of X, which is all zero bits, except for the one bit we use to change the json object. So, the CRC-32 value of the modified plaintext P' is the XOR result of the old plain text (including the mac key) and X: {% katex %}CRC(P') = CRC(P) \oplus CRC(X){% endkatex %}.
+In this task we can use this property, since we can compute the CRC-32 value of X. The CRC-32 value of the modified plaintext P' is the XOR result of the old plain text (including the mac key) and X: {% katex %}CRC(P') = CRC(P) \oplus CRC(X) \oplus CRC(0){% endkatex %}, where 0 is the CRC initalization vector consisting of zero bytes.
 
 This Python snippet shows the linearity by outputting the difference between the encrypted CRC-32 values:
 
@@ -129,7 +131,7 @@ XOR:  e1b652ef -> 0b11101111010100101011011011100001
 
 Meaning that, independent of the MAC, the difference between the encryped versions of the CRC value is always the same.
 
-This difference is the CRC 32 value of X: {% katex %}CRC(X) \oplus CRC(0){% endkatex %}, where 0 is the CRC initalization vector consisting of zero bytes.
+This difference is the CRC-32 value of X: {% katex %}CRC(X) \oplus CRC(0){% endkatex %}.
 
 For the funsies, we can verify that by calculating the CRC 32 value of X:
 
@@ -150,7 +152,7 @@ print(hex(crc_X ^ crc_zero))
 
 which also gives us: `0xef52b6e1`!
 
-Using all that we can exploit the service with a script like this:
+Using all that we can exploit the service with this script:
 
 ```python
 
@@ -158,12 +160,11 @@ from binascii import hexlify, unhexlify
 
 hex_stuff = input("Hex string:")
 
+b_str = bytearray(unhexlify(hex_stuff))
+b_str[10] = b_str[10] ^ 1 # flip 0 to 1
+
 # Difference between encrypted CRCs
 mask = unhexlify("e1b652ef")
-
-b_str = bytearray(unhexlify(hex_stuff))
-
-b_str[10] = b_str[10] ^ 1 # flip 0 to 1
 
 # align crc 32
 for i in range(-4, 0):
