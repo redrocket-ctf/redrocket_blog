@@ -96,7 +96,7 @@ Fortunately, CRC values are a very bad choice for implementing authenticated enc
 
 In this task we can use this property, since we can compute the CRC-32 value of X. The CRC-32 value of the modified plaintext P' is the XOR result of the old plain text (including the mac key) and X: {% katex %}CRC(P') = CRC(P) \oplus CRC(X) \oplus CRC(0){% endkatex %}, where 0 is the CRC initalization vector consisting of zero bytes.
 
-This Python snippet shows the linearity by outputting the difference between the encrypted CRC-32 values:
+This Python snippet shows the linearity by outputting the difference between the CRC-32 values:
 
 ```python
 
@@ -129,7 +129,7 @@ XOR:  e1b652ef -> 0b11101111010100101011011011100001
 XOR:  e1b652ef -> 0b11101111010100101011011011100001
 ```
 
-Meaning that, independent of the MAC, the difference between the encryped versions of the CRC value is always the same.
+Meaning that, independent of the MAC, the difference between the CRC values is always the same.
 
 This difference is the CRC-32 value of X: {% katex %}CRC(X) \oplus CRC(0){% endkatex %}.
 
