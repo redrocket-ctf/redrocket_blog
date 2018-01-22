@@ -6,7 +6,7 @@ tags:
     - kowu
 ---
 
-First of all, I assume that this was not the intended solution for the challenge as it was labeled with `Difficulty: Medium-Hard`.There were multiple bugs (two buffer overflow and a use after free, double free). I opted to solve it the easy way with a good old buffer overflow.
+First of all, I assume that this was not the intended solution for the challenge as it was labeled with `Difficulty: Medium-Hard`. There were multiple bugs (two buffer overflow and a use after free, double free). I opted to solve it the easy way with a good old buffer overflow.
 
 The challenge itself was a handwritten HTTP server in C. You can put items in your shopping cart, increase and decrease their amount, and remove them from the cart. We were provided with the binary and libc, aslr, nx and stack canaries turned on. The bug I exploited was in the POST request handling. Consider following pseudocode:
 ```c
@@ -22,12 +22,13 @@ while(keepalive) {
     dostuff(buf);
 }
 ```
-So basically a simple bufferoverflow. But before exploiting we need to leak the stack canary and the libc / proc base address. Wich was pretty easy. As the POST data is reused later, we could just overflow and leak by viewing our shopping cart (GET /cart HTTP/1.1).
-![m1](/assets/img/insomni_sapelo.png.png)
+So basically a simple buffer overflow. But before exploiting we need to leak the stack canary and the libc / proc base address. Wich was pretty easy. As the POST data is reused later, we could just overflow and leak by viewing our shopping cart (GET /cart HTTP/1.1).
+![m1](/assets/img/insomni_sapelo.png)
 The first red area is the HTTP request, second one is POST data. First green square is the stack canary, second a proc pointer and the third one belongs to libc_start_main_ret. If we send the above payload an item will be added to the shopping cart with the name "AAAA[cancary][procpointer]".
 By increasing the amount of A's we leak the libc_start_main_ret address as well and have all we need for pwnage! On all requests we set the "keepalive" to true, until we leaked everything and overwrote the stack properly with a simple ropchain (`[pop rdi;ret]["/bin/sh"][system]`). As soon as we set "keepalive" to false the ropchain will trigger system("/bin/sh").
 
 The flag was: `INS{sapeurs_are_the_real_heapsters}`.
+
 Full exploitcode we used, CTF codequality, unreliable:
 ```python
 from pwn import *
