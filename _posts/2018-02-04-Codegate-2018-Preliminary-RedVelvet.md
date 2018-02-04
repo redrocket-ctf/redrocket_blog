@@ -43,5 +43,5 @@ sm.explore(avoid=0x004007d0, find=0x0040152d)
 
 print(sm.found[0].posix.dumps(0))
 ```
-After a few Minutes we got `What_You_Wanna_Be?:)_lc_la`, but this is not the correct password / flag. Sometimes there are more than one solution when dealing with constraint solvers. But I noticed that there is a md5sum check included in the binary, so I just wrote a Python script bruteforcing the last 6 characters as the rest looked pretty good. This took too much time so i just decided to bruteforce the "lc" and "la" part, assuming the "_" to be correct.
+After a few minutes we got `What_You_Wanna_Be?:)_lc_la`, but this is not the correct password / flag. Sometimes there are multiple solutions when dealing with constraint solvers. In such a case one can modify the contraints to exclude the unwanted solution. But I noticed that there is a md5sum check included in the binary as well, so I just wrote a Python script bruteforcing the last 6 characters as the rest looked pretty good. This took too much time so i just decided to bruteforce the "lc" and "la" part, assuming the "_" to be correct.
 I immediately got the flag `What_You_Wanna_Be?:)_la_la`.
