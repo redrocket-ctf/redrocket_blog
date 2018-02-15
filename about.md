@@ -9,3 +9,5 @@ Hi!
 We are RedRocket(RedRocketRedRocket), a CTF team from Bonn, Germany.
 
 If you want to join us, visit [our website](http://redrocket.club).
+
+Or contact us via `"@".join("funnybot", "redrocket.club")`
