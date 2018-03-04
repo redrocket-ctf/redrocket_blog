@@ -53,7 +53,7 @@ q1 = 146061247732679897597906084614551914964128304916963561549427273712836853523
 
 So we're given an RSA encrypted flag and two helper numbers {% katex %}p_1{% endkatex %} and {% katex %}q_1{% endkatex %}. The goal is to recover the two primes p and q to compute the inverse of e in {% katex %}\phi(p \cdot q){% endkatex %} (the private key) and decrypt the flag.
 
-The helper numbers are build like this: {% katex %}p_1 = \sum_{i=0}^{q-1}{[(p-1) \mod p}]{% endkatex %}, calculating {% katex %}q_1{% endkatex %} works analogous.
+The helper numbers are build like this: {% katex %}p_1 = \sum_{i=0}^{q-1}{[(p-1)^i \mod p}]{% endkatex %}, calculating {% katex %}q_1{% endkatex %} works analogous.
 
 An example with smaller primes shows how we can approach the problem of finding p and q. Assuming we use {% katex %}p = 5, q = 7{% endkatex %}, if we write down the sum: {% katex display %}p_1 = 1 \mod 5 + 4 \mod 5 + 16 \mod 5 + 64 \mod 5 + ...{% endkatex %}
 we can see that the sum actually is:
