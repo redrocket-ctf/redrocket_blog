@@ -74,13 +74,13 @@ So the task here is to forge a valid tag under an unknown key for the plaintext 
 The cryptography Python module uses the supplied IV as nonce in the Counter Mode AES.
 The code shows that the same IV/nonce was used for all encryptions!
 
-This is of course a very bad idea, and - as it turns out - two ciphertext/tag tuples together with their associated data is enough to forge authentication tags. *Note that these values are public in real encryption systems using GCM*.
+This is of course a very bad idea, and - as it turns out - two ciphertext/tag tuples together with their associated data is enough to forge authentication tags. *Note that all these values are public in real encryption systems using GCM*.
 
-The calculation of the authentication tag can be seen in this simple, very not confusing graph:
+The calculation of the authentication tag in GCM can be seen in this graph:
 
 ![m1](/assets/img/volga_gcm.png)
 
-In the Graph *H* ist the hash key calculated by the encryption of a zero block under the encryption key {% katex %} H = E_k(0) {% endkatex %}. {% katex %}Gmul_H(X){% endkatex %} denotes the multiplication with H in the Galois Field {% katex %}GF(2^{128}){% endkatex %}.
+*H* is the hash key calculated by the encryption of a zero block under the encryption key {% katex %} H = E_k(0) {% endkatex %}. {% katex %}Gmul_H(X){% endkatex %} denotes the multiplication with H in the Galois Field {% katex %}GF(2^{128}){% endkatex %}.
 
 To forge an authentication tag we employ the **forbidden attack**. The attack works if a nonce was illegally used multiple times (hence the name). It is described (a.o.) [here](https://www.nds.ruhr-uni-bochum.de/media/nds/veroeffentlichungen/2016/08/15/nonce-disrespect-woot.pdf).
 
