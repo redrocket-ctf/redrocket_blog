@@ -113,7 +113,7 @@ f'_1(X) = A_{1,1}X^{5} + C_{1,1}X^{4} + C_{1,2}X^3 + C_{1,3}X^2 + LX + E_k(J_0) 
 f'_2(X) = A_{2,1}X^{5} + C_{2,1}X^{4} + C_{2,2}X^3 + C_{2,3}X^2 + LX + E_k(J_0) + T_2
 {% endkatex %}
 
-we get polynomials that evaluate to 0 at position H {% katex %}f'_1(H) = 0{% endkatex %}, making the hash key *H* a root of both.
+we get polynomials that evaluate to 0 at H: {% katex %}f'_1(H) = 0{% endkatex %}, making the hash key *H* a root of both.
 Every coefficient in these polynomial is known except for {% katex %}E_k(J_0){% endkatex %}, which is identical in both polynomials since the nonce was reused. So if we substract them from each other (note that adding and substracting is the same in {% katex %}GF(2^{128}){% endkatex %}):
 
 {% katex display %}
@@ -126,9 +126,10 @@ we get a polynomial with known coefficients and *H* as a root:
 g(X) = (A_{1,1} + A_{2,1})X^{5} + (C_{1,1} + C_{2,1})X^{4} + ... + LX + T_1 + T2
 {% endkatex %}
 
-If we factor this polynomial we have its roots as a list of candidates for the hash key *H*.
-Since we work in {% katex %}GF(2^{128}){% endkatex %} adding the coefficients is the same as XORing their respective blocks.
-Then we can calculate the missing {% katex %}E_k(J_0){% endkatex %} by evaluating: 
+The roots of this polinomial are candidates for the hash key *H*.
+*Since we work in {% katex %}GF(2^{128}){% endkatex %} adding the coefficients is the same as XORing their respective blocks.*
+
+Now we can calculate the missing {% katex %}E_k(J_0){% endkatex %} by evaluating: 
 
 {% katex display %}
 E_k(J_0) = f'_1(H) + A_{1,1}H^{5} + C_{1,1}H^{4} + C_{1,2}H^3 + C_{1,3}H^2 + LH + T_1
