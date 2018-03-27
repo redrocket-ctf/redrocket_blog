@@ -71,7 +71,7 @@ The authentication tag guarantees that the ciphertext and the associated data (w
 
 So the task here is to forge a valid tag under an unknown key for the plaintext *P3*: `From: John Doe\nTo: VolgaCTF\nSend ALL BTC` with the associated data *A3*: `John Doe`. We have two valid ciphertext/tag pairs and the ciphertext of *P3* to do so.
 
-Python's cryptography module uses the supplied IV as nonce in the Counter Mode.
+The cryptography Python module uses the supplied IV as nonce in the Counter Mode AES.
 The code shows that the same IV/nonce was used for all encryptions!
 
 This is of course a very bad idea, and - as it turns out - two ciphertext/tag tuples together with their associated data is enough to forge authentication tags. *Note that these values are public in real encryption systems using GCM*.
