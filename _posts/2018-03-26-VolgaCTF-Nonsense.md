@@ -124,7 +124,7 @@ x \equiv r_1^{-1} (s_1 k_1 -m_1) \mod q
 and the "random" k with:
 
 {% katex display %}
-k_1 \equiv (r_1^{-1} m_1 - r_2^{-2}(m_2 - s_2 b)) \cdot (s_1 r_1^{-1} - a s_2 r_2^{-1})^{-1} \mod q
+k_1 \equiv (r_1^{-1} m_1 - r_2^{-1}(m_2 - s_2 b)) \cdot (s_1 r_1^{-1} - a s_2 r_2^{-1})^{-1} \mod q
 {% endkatex %}
 
 This Python script does the calculations for us:
