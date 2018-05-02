@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Pwn
-title: asis CTF quals 2018 fcascade
+title: ASIS CTF Quals 2018 fcascade
 tags: 
     - kowu
 ---
@@ -64,7 +64,9 @@ struct _IO_FILE
 };
 ```
 `_IO_buf_base` and `_IO_buf_end` are of special interest for us. They define the boundaries of the filestream's buffer.
+
 ![m1](/assets/img/asis_fstream.png)
+
 If we can overwrite the LSB of `_IO_buf_base` with a zero, we are able to overwrite all the red marked parts of the structure by the next call of scanf. We then simply overwrite the base and end pointers with an address range of our choice and can go get a shell. I used the malloc hook for this purpose. To turn `malloc(size)` into a `system("/bin/sh")` scanf needs to succesfully parse a number wich represents the memoryaddress containing the '/bin/sh' string. As the IO buffer is consuming all it's bytes first before reading new ones, it is sufficient to place the number string for fscanf somewhere at the end in the overwritten structure where it doesn't bother (it doesn't seem to bother `_IO_backup_base`). When all bytes are consumed by scanf and getchar new bytes are read at the location of our choice (malloc hook) and the next malloc call will result in a shell.
 
 ```python
