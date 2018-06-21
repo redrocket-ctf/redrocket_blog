@@ -9,7 +9,7 @@ tags:
 We were only provided with the binary. A first look at the challenge revealed an obvious memory leak (in the 'leak' function).
 It was reading input without zero terminating into a buffer on the stack and printing it out afterwards.
 We can dump some old stack content with this method. On my local machine I found out that one interesting address in the dump belongs to libc's `__libc_start_main_ret` and we can use it to retrieve libc's base address.
-Also a [libc database search](https://libc.blukat.me/?q=__libc_start_main_ret%3A830) revealed that we propably have a `libc6_2.23-0ubuntu[3,7,9,10]_amd64` on the remote target. So far so good.
+Also a [libc database search](https://libc.blukat.me/?q=__libc_start_main_ret%3A830) revealed that we probably have a `libc6_2.23-0ubuntu[3,7,9,10]_amd64` on the remote target. So far so good.
 
 
 
@@ -32,7 +32,7 @@ void ccloud()
   }
 }
 ```
-The bug here resides in the nonexistent return value error handling of malloc. If malloc returns zero, for example if there isn't enough space, the follow up read will fail as well (but not crash). Nevertheless `*((_BYTE *)buf + size - 1) = 0;` will write a zerobyte at `size - 1`. So we can write to a location of our choice! But how to turn this into RCE? The answer lies in how file streams are handled in glibc. Let's take a look at the definitions.
+The bug here resides in the nonexistent return value error handling of malloc. If malloc returns zero, for example if there isn't enough space, the follow up read will fail as well (but not crash). Nevertheless `*((_BYTE *)buf + size - 1) = 0;` will write a zerobyte at `size - 1`. So we can write to a location of our choice! But how to turn this into RCE? The answer lies in how file streams are handled in glibc. Besides kernel buffering there is userland buffering as well for all cstdlib functions with file streams. Let's take a look at the relevant structure `_IO_FILE`.
 ```c
 struct _IO_FILE
 {
@@ -63,11 +63,11 @@ struct _IO_FILE
 #ifdef _IO_USE_OLD_IO_FILE
 };
 ```
-`_IO_buf_base` and `_IO_buf_end` are of special interest for us. They define the boundaries of the filestream's buffer.
+`_IO_buf_base` and `_IO_buf_end` are of special interest for us. They define the boundaries of the filestream's buffer. There is no extra field for the size of the buffer, it gets calculated via `end - base`.
 
 ![m1](/assets/img/asis_fstream.png)
 
-If we can overwrite the LSB of `_IO_buf_base` with a zero, we are able to overwrite all the red marked parts of the structure by the next call of scanf. We then simply overwrite the base and end pointers with an address range of our choice and can go get a shell. I used the malloc hook for this purpose. To turn `malloc(size)` into a `system("/bin/sh")` scanf needs to succesfully parse a number wich represents the memoryaddress containing the '/bin/sh' string. As the IO buffer is consuming all it's bytes first before reading new ones, it is sufficient to place the number string for fscanf somewhere at the end in the overwritten structure where it doesn't bother (it doesn't seem to bother `_IO_backup_base`). When all bytes are consumed by scanf and getchar new bytes are read at the location of our choice (malloc hook) and the next malloc call will result in a shell.
+If we can now overwrite the LSB of `_IO_buf_base` with a zero, we are able to overwrite all the red marked parts of the structure by the next call of scanf. We then simply overwrite the base and end pointers with an address range of our choice and can go get a shell. I used the malloc hook for this purpose. To turn `malloc(size)` into a `system("/bin/sh")` scanf needs to succesfully parse a number wich represents the memoryaddress containing the '/bin/sh' string. As the IO buffer is consuming all it's bytes first before reading new ones, it is sufficient to place the number string for fscanf somewhere at the end in the overwritten structure where it doesn't bother (it doesn't seem to bother `_IO_backup_base`). When all bytes are consumed by scanf and getchar new bytes are read at the location of our choice (malloc hook) and the next malloc call will result in a shell.
 
 ```python
 from pwn import *
