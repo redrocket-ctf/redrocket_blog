@@ -6,13 +6,13 @@ tags:
     - kowu
 ---
 
-1337router was an arm executable, aslr disabled, implementing an HTTP server. The vulnerability was that we could upload a zip file (wich contained a https.conf). The zip got deflated afterwards. The zip file had a size limitation of 512 bytes. Of course the deflated size was not checked and it got deflated on the stack. Its time for ROPgadget.
+1337router was an arm executable, aslr disabled, implementing a HTTP server. The vulnerability was that we could upload a zip file (wich contained a httpd.conf). The zip got deflated afterwards. The zip file had a size limitation of 512 bytes. Of course the deflated size was not checked and it got deflated on the stack. Its time for ROPgadget.
 
 
 I used a function of the executable to help me in reading any file. It was meant to read a html file and send it back as a HTTP response. It had two parameters. Buffer (in r1) and a path to the file (in r0). As there was no aslr buffer could just point to a static position. r0 was a little bit more difficult as the stack had randomization. However gdb told me that r4 pointed into the stack at a controllable position, so lets just move r4 into r0. We end up with a simple ropchain.
 
 ```
-0x849ec pop{r1,sp};
+0x849ec pop{r1, pc};
 0x691ec mov r0, r4; pop {r4, r5, r6, r7, r8, pc};
 0x10934 sendresponse(buf, filepath);
 ```
