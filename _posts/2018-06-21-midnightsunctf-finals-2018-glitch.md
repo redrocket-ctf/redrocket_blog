@@ -14,7 +14,7 @@ int guess = readguess();
 logattempt(username, guess);
 sleep(3);
 if (guess == secret)
-    system('/bin/sh');
+    system("/bin/sh");
 exit(0);
 ```
 
