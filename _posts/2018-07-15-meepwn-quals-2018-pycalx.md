@@ -12,6 +12,9 @@ a value, an operator and a second value.
 The code for the challenge is visible on the page when `source` is in the GET-arguments.
 There is a link for that directly on the page.
 
+The values and operation are used inside an `eval` statement, which very clearly is
+the target of our attack.
+
 ## Filtered input
 
 Having a look around we'll see that values and the operator are filtered in a few ways.
