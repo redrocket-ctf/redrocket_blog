@@ -134,7 +134,7 @@ s =  \frac{S_1 - S_2}{H(R_1, A_1, M) - H(R_2, A_2, M)}
 Note that this calculation is done modulo, so it actually reads like this:
 
 {% katex display %}
-s \equiv  (S_1 - S_2) \cdot (H(R_1, A, M) - H(R_2, A, M))^{-1} \mod \ell.
+s \equiv  (S_1 - S_2) \cdot (H(R_1, A_1, M) - H(R_2, A_2, M))^{-1} \mod \ell.
 {% endkatex %}
 
 ## Putting it together
