@@ -114,13 +114,13 @@ The secret r is added to the hash of R, the public key A, and the message multip
 So if we manage to sign the same message two times, using the same private key, but two different public keys we would get the following equations:
 
 {% katex display %}
-S_1 \equiv r_1 + H(R_1, A, M) s \pmod \ell.
+S_1 \equiv r_1 + H(R_1, A_1, M) s \pmod \ell.
 {% endkatex %}
 
 and 
 
 {% katex display %}
-S_2 \equiv r_2 + H(R_2, A, M) s \pmod \ell.
+S_2 \equiv r_2 + H(R_2, A_2, M) s \pmod \ell.
 {% endkatex %}
 
 For these two equations, we have all the variables, except for the secret key s. Given this secret key s, we could just sign messages our selves.
@@ -128,7 +128,7 @@ For these two equations, we have all the variables, except for the secret key s.
 The secret s can easily be calculated:
 
 {% katex display %}
-s =  \frac{S_1 - S_2}{H(R_1, A, M) - H(R_2, A, M)}
+s =  \frac{S_1 - S_2}{H(R_1, A_1, M) - H(R_2, A_2, M)}
 {% endkatex %}
 
 Note that this calculation is done modulo, so it actually reads like this:
