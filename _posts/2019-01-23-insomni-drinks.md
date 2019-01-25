@@ -65,8 +65,8 @@ This service encrypts a user generated string concatinated with `||` and the enc
 
 The goal here was to find the de-/encryption key of the beer voucher. 
 
-The code is using a wrapper for the OpenPGP library.
-The OpenPGP RFC says, PGP is using a block cipher in [CFB mode](https://de.wikipedia.org/wiki/Cipher_Feedback_Mode). Since we didn't see how we could directly attack this service, we were buffeled for a bit.
+The code is using a wrapper for the GnuPGP library.
+The corresponding RFC says, PGP is using a block cipher in [CFB mode](https://de.wikipedia.org/wiki/Cipher_Feedback_Mode). Since we didn't see how we could directly attack this service, we were buffeled for a bit.
 
 We decided to find out the length of the encryption key, since it might be to short. To do so, we send the service `receipientName`s with an increasing amount of `A`s. To our surprise, the ciphertext size didn't increase per character. 
 
@@ -82,7 +82,7 @@ The exploit script is not optimal (CTF code quality...), since it doesn't necess
 
 Running it the first time gave us the key `G1M_V3RY_TH1RSTY`, which seems wierd and also didn't work for decryption. Forbidding the first underline, it would give us the key `G1MME_B33RY_TH1RSTY`, which also doesn't make sense. This is because the key contains repeating patterns (e.g. `B33RY` compresses, just as `B33R_` because of the word `V3RY`). 
 
-To fix this we'd need a more sophisticated approach... But it was 3 a.m. and we were tired. So we just fixed the prefix to `||G1MME_B33R_` which seemed reasonable. 
+To fix this we'd need a more sophisticated approach, storing all candidate characters... But it was 3 a.m. and we were tired. So we just fixed the prefix to `||G1MME_B33R_` which seemed reasonable. 
 
 This worked and gave us: 
 
