@@ -4,9 +4,6 @@ category: Stego
 title: MidnightsunCTF 2019 qualifier
 tags: 
     - kauzu
-    - stego
-    - midnightsun
-    - pcap
 ---
 
 
