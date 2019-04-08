@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Pwn
-title: MidnightsunCTF 2019 qualifier
+title: MidnightsunCTF Quals 2019 - hfs
 tags: 
     - kowu
 ---

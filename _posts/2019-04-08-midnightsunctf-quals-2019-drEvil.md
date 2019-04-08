@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Stego
-title: MidnightsunCTF 2019 qualifier
+title: MidnightsunCTF Quals 2019 - Dr. Evil
 tags: 
     - kauzu
 ---
