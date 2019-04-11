@@ -6,11 +6,8 @@ tags:
     - Manf
 ---
 
-
-Tulpan257
-=========
 {% katexmm %}
-We were given the following sage script:
+The following sage script was given:
 ```
 flag = "XXXXXXXXXXXXXXXXXXXXXXXXX"
 p = 257
