@@ -9,7 +9,7 @@ tags:
 
 Tulpan257
 =========
-
+{% katexmm %}
 We were given the following sage script:
 ```
 flag = "XXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -81,3 +81,4 @@ Lessons learned
 - Coding theory has all kinds of useful stuff for "out of n relations, only k hold, but we don't know which"-type situations
 - If a builtin function of sage isn't quite good or general enough, there is probably a better one somewhere
 - Don't waste time on elegant solutions if you can just guess
+{% endkatexmm %}
