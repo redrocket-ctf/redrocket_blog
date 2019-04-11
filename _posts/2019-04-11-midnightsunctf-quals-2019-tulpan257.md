@@ -6,7 +6,6 @@ tags:
     - Manf
 ---
 
-{% katexmm %}
 The following sage script was given:
 ```
 flag = "XXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -30,17 +29,17 @@ sage: prover(flag)
 [138, 229, 245, 162, 184, 116, 195, 143, 68, 1, 94, 35, 73, 202, 113, 235, 46, 97, 100, 148, 191, 102, 60, 118, 230, 256, 9, 175, 203, 136, 232, 82, 242, 236, 37, 201, 37, 116, 149, 90, 240, 200, 100, 179, 154, 69, 243, 43, 186, 167, 94, 99, 158, 149, 218, 137, 87, 178, 187, 195, 59, 191, 194, 198, 247, 230, 110, 222, 117, 164, 218, 228, 242, 182, 165, 174, 149, 150, 120, 202, 94, 148, 206, 69, 12, 178, 239, 160, 7, 235, 153, 187, 251, 83, 213, 179, 242, 215, 83, 88, 1, 108, 32, 138, 180, 102, 34]
 ```
 
-It doesn't work quite as given - `prover()` must be given a polynomial, not a string. I figured that this polynomial was probably just using the flag string as coefficients, and just tried to recover that secret polynomial first (under the assumption that it was of degree $k$).
-The `r.coeffs()` output has length $26$, so this means that $k=26$.
+It doesn't work quite as given - `prover()` must be given a polynomial, not a string. I figured that this polynomial was probably just using the flag string as coefficients, and just tried to recover that secret polynomial first (under the assumption that it was of degree {% katex %}k{% endkatex %}).
+The `r.coeffs()` output has length {% katex %}26{% endkatex %}, so this means that {% katex %}k=26{% endkatex %}.
 
-Now the hard part was recovering the polynomial `masked` - if I knew that, I could just multiply by the multiplicative inverse of $r$ in the ring $GF(p)[x]/(x^k+1)$ (which fortunately exists). The known output `y` is obtained by evaluating `masked` at the positions $0,1,\ldots,106$ - however, with random chance of $\frac{42}{107}$, a random output modulo $p$ is chosen instead. I also know that `masked` is a polynomial of degree $k-1$ - so if I just knew $k$ correct points, I could simply construct the Lagrange Polynomial through these points.
+Now the hard part was recovering the polynomial `masked` - if I knew that, I could just multiply by the multiplicative inverse of {% katex %}r{% endkatex %} in the ring {% katex %}GF(p)[x]/(x^k+1){% endkatex %} (which fortunately exists). The known output `y` is obtained by evaluating `masked` at the positions {% katex %}0,1,\ldots,106{% endkatex %} - however, with random chance of {% katex %}\frac{42}{107}{% endkatex %}, a random output modulo {% katex %}p{% endkatex %} is chosen instead. I also know that `masked` is a polynomial of degree {% katex %}k-1{% endkatex %} - so if I just knew {% katex %}k{% endkatex %} correct points, I could simply construct the Lagrange Polynomial through these points.
 
 With the output containing errors I had two choices:
 
-- Guessing: If I just guess 26 points that had the correct output, I could recover the original polynomial. A quick calculation shows that this has about chance $2\cdot 10^{-6}$ of happening - and it is easy to detect, as some random polynomial through 26 of the points will match `y` in far less places than the correct one. Having now tried it after the CTF, it works very well.
+- Guessing: If I just guess 26 points that had the correct output, I could recover the original polynomial. A quick calculation shows that this has about chance {% katex %}2\cdot 10^{-6}{% endkatex %} of happening - and it is easy to detect, as some random polynomial through 26 of the points will match `y` in far less places than the correct one. Having now tried it after the CTF, it works very well.
 - Using someone elses work: My first instinct however was to search for a more elegant algorithm for the problem. In retrospect, just using brute force would probably have saved me some time - but this variant was at least quite educational.
  
-I knew that problems of the type "given a set of discrete equations, find a solution that satisfies a high number of them" were quite typical for *Coding theory*, so I started looking at well-known error-correcting codes. After a little reading, the *Reed-Solomon Code* jumped out to me - Wikipedia gives the codewords of a Reed-Solomon Code as $\{(p(a_1), p(a_2), \ldots, p(a_n))\mid p \text{ is a polynomial over } F \text{ of degree } k\}$. Setting $n=107, a_i=i-1, k=26, F=GF(p)$, this is exactly the kind of output we are dealing with. So now I just needed to *decode* the codeword given to me in `y` to one that lies in that Reed-Solomon Code. Fortunately, sage has [builtin functions](http://doc.sagemath.org/html/en/reference/coding/sage/coding/grs.html) for everything:
+I knew that problems of the type "given a set of discrete equations, find a solution that satisfies a high number of them" were quite typical for *Coding theory*, so I started looking at well-known error-correcting codes. After a little reading, the *Reed-Solomon Code* jumped out to me - Wikipedia gives the codewords of a Reed-Solomon Code as {% katex %}\{(p(a_1), p(a_2), \ldots, p(a_n))\mid p \text{ is a polynomial over } F \text{ of degree } k\}{% endkatex %}. Setting {% katex %}n=107, a_i=i-1, k=26, F=GF(p){% endkatex %}, this is exactly the kind of output we are dealing with. So now I just needed to *decode* the codeword given to me in `y` to one that lies in that Reed-Solomon Code. Fortunately, sage has [builtin functions](http://doc.sagemath.org/html/en/reference/coding/sage/coding/grs.html) for everything:
 
 ```
 sage: p, k = 257, 26
@@ -64,7 +63,7 @@ sage: masked
 136*x^25 + 181*x^24 + 158*x^23 + 233*x^22 + 215*x^21 + 95*x^20 + 235*x^19 + 76*x^18 + 133*x^17 + 199*x^16 + 105*x^15 + 46*x^14 + 53*x^13 + 123*x^12 + 150*x^11 + 28*x^10 + 87*x^9 + 122*x^8 + 59*x^7 + 177*x^6 + 174*x^5 + 200*x^4 + 143*x^3 + 77*x^2 + 65*x + 138
 ```
 
-Finally it's just a matter of multiplying by $r^{-1}$:
+Finally it's just a matter of multiplying by {% katex %}r^{-1}{% endkatex %}:
 ```
 sage: R = FF.quo(x^k+1)
 sage: flag = R(masked)*R(r)^(-1)
@@ -78,4 +77,3 @@ Lessons learned
 - Coding theory has all kinds of useful stuff for "out of n relations, only k hold, but we don't know which"-type situations
 - If a builtin function of sage isn't quite good or general enough, there is probably a better one somewhere
 - Don't waste time on elegant solutions if you can just guess
-{% endkatexmm %}
