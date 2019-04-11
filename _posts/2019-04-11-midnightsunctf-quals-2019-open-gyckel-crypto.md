@@ -32,8 +32,8 @@ with {% katex %}0\leq x,y<10^{250}{% endkatex %}, then {% katex %}q{% endkatex %
 
 This means that for {% katex %}n=pq{% endkatex %} we have:
 
-{% katex display %}n = pq = (10^{250}x+y)(10^{250}y+x) = \\
-=10^{500}xy + 10^{250}x^2 + 10^{250}y^2 + xy = (10^{500}+1)xy+10^{250}(x^2+y^2){% endkatex %}
+{% katex display %}n = pq = (10^{250}x+y)(10^{250}y+x) = {% endkatex %}
+{% katex display %}=10^{500}xy + 10^{250}x^2 + 10^{250}y^2 + xy = (10^{500}+1)xy+10^{250}(x^2+y^2){% endkatex %}
 
 But now 
 {% katex display %}n \equiv 0xy + 10^{250}(x^2+y^2) \mod 10^{500}+1{% endkatex %}
