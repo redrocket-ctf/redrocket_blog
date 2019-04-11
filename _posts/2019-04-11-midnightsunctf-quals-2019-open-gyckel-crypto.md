@@ -28,7 +28,7 @@ If we write {% katex %}p{% endkatex %} as:
 
 with {% katex %}0\leq x,y<10^{250}{% endkatex %}, then {% katex %}q{% endkatex %} is obtained by swapping {% katex %}x{% endkatex %} and {% katex %}y{% endkatex %}:
 
-{% katex display %}q = 10^250y+x{% endkatex %}
+{% katex display %}q = 10^{250}y+x{% endkatex %}
 
 This means that for {% katex %}n=pq{% endkatex %} we have:
 
