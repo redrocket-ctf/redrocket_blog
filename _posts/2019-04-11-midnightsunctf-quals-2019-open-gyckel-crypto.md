@@ -49,7 +49,7 @@ sage: s = Integer(R(n)*R(10^250)^-1)
 
 But on the other hand, as {% katex %}x{% endkatex %} and {% katex %}y{% endkatex %} are less than {% katex %}10^{250}{% endkatex %}, the sum of their squares must be less than {% katex %}(10^{250})^2+(10^{250})^2=2\cdot 10^{500}{% endkatex %}.
 As we already know the residue of {% katex %}x^2+y^2{% endkatex %} mod {% katex %}10^{500}+1{% endkatex %}, this means that we only have two possibilities left: {% katex %}s{% endkatex %} and {% katex %}s+10^{500}+1{% endkatex %}.
-It is possible to quite easily exclude the first one: {% katex %}s{% endkatex %} is divisible by {% katex %}3{% endkatex %} but not {% katex %}9{% endkatex %}, which would be in contradiction to [Fermat's theorem on sums of two squares](https://en.wikipedia.org/wiki/Fermat%27s_theorem_on_sums_of_two_squares).
+It is possible to quite easily exclude the first one: {% katex %}s{% endkatex %} is divisible by {% katex %}3{% endkatex %} but not {% katex %}9{% endkatex %}, which would be in contradiction to the [Sum of two squares theorem](https://en.wikipedia.org/wiki/Sum_of_two_squares_theorem).
 Of course, one can also just try both values.
 
 This means that {% katex %}x^2+y^2{% endkatex %} must be {% katex %}s+10^{500}+1{% endkatex %}.
