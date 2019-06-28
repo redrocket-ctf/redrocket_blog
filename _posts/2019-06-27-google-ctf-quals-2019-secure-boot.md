@@ -84,8 +84,8 @@ Printing a backtrace reveals the following:
 10  0x7a7e577          sp: 0x7ec1a28           208  [??]  r13+7672855 
 ```
 
-I now went through all the call frames and looked for something interesting (in search for the main loop).
-At frame 5 I noticed the use of `0xdeadbeefdeadbeef` and frame 7 checks a functions result and and calls another function after loading the string "Blocked". Therefore I assumed `0x67dae50` to be our password check routine we are interested in.
+I now went through all the call frames and looked for something interesting (in search for some main loop).
+At frame 5 I noticed the use of `0xdeadbeefdeadbeef` (suspicious). Frame 7 checks a functions result and, depending on the output, calls another function with the string "Blocked". Therefore I assumed `0x67dae50` to be our password check routine we are interested in.
 
 ```
 0x067d4d2f      e81c610000     call 0x67dae50              ;[1]
@@ -124,7 +124,7 @@ int checkpasswd() {
         if (hashptr[0x00] == 0xdeadbeefdeadbeef &&
             hashptr[0x08] == 0xdeadbeefdeadbeef &&
             hashptr[0x10] == 0xdeadbeefdeadbeef &&
-            hashptr[0x18] == oxdeadbeefdeadbeef)
+            hashptr[0x18] == 0xdeadbeefdeadbeef)
             return 1;
         print("wrong!");
     }
@@ -132,8 +132,7 @@ int checkpasswd() {
 }
 ```
 
-So a classic stack based overflow (128B space vs. 141B usage). We overflow into the hashptr and therefore control where the 32Bytes of resulting hash are written to.
-We can use this to bypass the login password check by partially overwriting our own return address.
+So a classic stack based overflow (128B space vs. 141B usage). We overflow into the hashptr and therefore control where the 32 Bytes of resulting hash are written to. We can use this to bypass the login password check by partially overwriting our own return address.
 So instead of returning to `0x67d4d34` we want to return to `0x67d4d49`, i.e. we need to change the first byte from `0x34` to `0x49`. The return address is located at `0x7ec18b8`, therefore we need to modify the hashptr to point to `0x7ec18b8 - 0x20 + 1 = 0x7ec1899`.
 The payload for this looks like this:
 
