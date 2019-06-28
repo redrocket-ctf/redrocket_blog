@@ -142,7 +142,7 @@ pl = "A" * 136 + struct.pack('<I', 0x07ec1899)
 
 To overwrite the first byte of the return address with controlled data, one can bruteforce possible sha256 hashes.
 During the ctf due to lazyness I just manually incremented the first char, as the possibility is > 1/256 to hit a valid bypass :)
-I got a working payload quite fast this way.
+Dirty, but I got a working payload quite fast this way.
 
 ```python
 pl = "E" + "A" * 135 + struct.pack('<I', 0x07ec1899)
