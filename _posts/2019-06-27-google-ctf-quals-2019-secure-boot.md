@@ -10,7 +10,7 @@ tags:
 
 A x86\_64 qemu challenge. However, this time it is about getting it to boot up...
 
-'''
+```
 .
 ├── contents
 │   ├── boot.nsh
@@ -19,11 +19,11 @@ A x86\_64 qemu challenge. However, this time it is about getting it to boot up..
 │   └── startup.nsh
 ├── OVMF.fd
 └── run.py
-'''
+```
 
 Running the challenge and doing nothing gives us the following output:
 
-'''
+```
 UEFI Interactive Shell v2.2
 EDK II
 UEFI v2.70 (EDK II, 0x00010000)
@@ -43,11 +43,11 @@ If Secure Boot is enabled it will verify kernel's integrity and
 return 'Security Violation' in case of inconsistency.
 Booting...
 Script Error Status: Security Violation (line number 5)
-'''
+```
 
 And execution stops. However, if we enter the "BIOS" by hitting `del` or `F12` we are greeted with the following:
 
-'''
+```
 BdsDxe: loading Boot0000 "UiApp" from Fv(7CB8BDC9-F8EB-4F34-AAEA-3EE4AF6516A1)/FvFile(462CAA21-7614-4503-836E-8AB6F4662331)
 BdsDxe: starting Boot0000 "UiApp" from Fv(7CB8BDC9-F8EB-4F34-AAEA-3EE4AF6516A1)/FvFile(462CAA21-7614-4503-836E-8AB6F4662331)
 ****************************
@@ -57,19 +57,18 @@ BdsDxe: starting Boot0000 "UiApp" from Fv(7CB8BDC9-F8EB-4F34-AAEA-3EE4AF6516A1)/
 ****************************
 
 Password?
-'''
+```
 
 This is where the challenge starts.
 
 # Pre-Reversing
 
-First of all, I modified the run.py script and added the `-s` option to qemu (-s ia a shorthand to wait for gdb connections on port 1234).
-I also removed the `console=/dev/null` as I want to use the console later on.
+First of all, I modified the run.py script and added the `-s` option to qemu (-s ia a shorthand to wait for gdb connections on port 1234). I also removed the `console=/dev/null` as I want to use the console later on.
 
-Now we can run the challenge until we get to the password input prompt. Once reached, we attach radare2 to it with `r2 -D gdb gdb://localhost:1234`.
-Radare will stop the execution. As the program is expecting input from us, we are probably currently in some kind of input routine. A backtrace should lead us to the calling functions.
+Now we can run the challenge until we get to the password input prompt. Once reached, we attach radare2 to it with `r2 -D gdb gdb://localhost:1234`. Radare will stop the execution. As the program is expecting input from us, we are probably currently in some kind of input routine. A backtrace should lead us to the calling functions.
 
 Printing a backtrace reveals the following:
+
 ```
 :> dbt
 0  0x7b30a41          sp: 0x0                 0    [??]  rip r13+8403169
@@ -83,11 +82,10 @@ Printing a backtrace reveals the following:
 8  0x7ec5f50          sp: 0x7ec18f8           64   [??]  rsp+18600 
 9  0x7ec8317          sp: 0x7ec1958           96   [??]  rsp+27759 
 10  0x7a7e577          sp: 0x7ec1a28           208  [??]  r13+7672855 
-
 ```
+
 I now went through all the call frames and looked for something interesting (in search for the main loop).
-At frame 5 I noticed the use of `0xdeadbeefdeadbeef` and frame 7 checks a functions result and and calls another function after loading the string "Blocked".
-Therefore I assumed `0x67dae50` to be our password check routine we are interested in.
+At frame 5 I noticed the use of `0xdeadbeefdeadbeef` and frame 7 checks a functions result and and calls another function after loading the string "Blocked". Therefore I assumed `0x67dae50` to be our password check routine we are interested in.
 
 ```
 0x067d4d2f      e81c610000     call 0x67dae50              ;[1]
@@ -96,6 +94,7 @@ Therefore I assumed `0x67dae50` to be our password check routine we are interest
 0x067d4d38      488d0d1fa100.  lea rcx, [0x067dee5e]       ; u"\nBlocked!\n"
 0x067d4d3f      e8b976ffff     call 0x67cc3fd
 ```
+
 To confirm this, I placed a breakpoint on the `test al, al` instruction (`db 0x67d4d34`) and, once the breakpoint was hit, manually modified the return value from zero to one (`dr rax=1`).
 Continuing execution (`dc`) results in a BIOS menu where I could turn off secure boot and initiate a reboot with the new BIOS settings. As a result, the system would start up normally.
 
@@ -103,6 +102,7 @@ Continuing execution (`dc`) results in a BIOS menu where I could turn off secure
 
 As I identified the password input routine, it's time for reversing (using IDA). First, I dumped the whole guest memory via the qemu monitor (press `ctrl+a` then `c` and dump using `dump-guest-memory`).
 We get some decompiled and cleaned up pseudocode like this (left some details away for simplicity):
+
 ```c
 int checkpasswd() {
     uint64_t *hashptr;
@@ -119,7 +119,7 @@ int checkpasswd() {
             print("*");
         }
         keybuffer[i] = '\0';
-        /* assumed bc of magic constants */
+        /* assumed because of magic constants */
         sha256(32, i, keybuffer, hashptr); 
         if (hashptr[0x00] == 0xdeadbeefdeadbeef &&
             hashptr[0x08] == 0xdeadbeefdeadbeef &&
@@ -131,10 +131,10 @@ int checkpasswd() {
     return 0;
 }
 ```
+
 So a classic stack based overflow (128B space vs. 141B usage). We overflow into the hashptr and therefore control where the 32Bytes of resulting hash are written to.
 We can use this to bypass the login password check by partially overwriting our own return address.
-So instead of returning to `0x67d4d34` we want to return to `0x67d4d49`, i.e. we need to change the first byte from `0x34` to `0x49`.
-The return address is located at `0x7ec18b8`, therefore we need to modify the hashptr to point to `0x7ec18b8 - 0x20 + 1 = 0x7ec1899`.
+So instead of returning to `0x67d4d34` we want to return to `0x67d4d49`, i.e. we need to change the first byte from `0x34` to `0x49`. The return address is located at `0x7ec18b8`, therefore we need to modify the hashptr to point to `0x7ec18b8 - 0x20 + 1 = 0x7ec1899`.
 The payload for this looks like this:
 
 ```python
@@ -171,5 +171,4 @@ launching with socat:
 ```
 socat /dev/stdin,rawer "SYSTEM:python2 secureboot.py"
 ```
-This will drop us into the BIOS options. We need to select `Device Manager` -> `Secure Boot Configuration` -> disable.
-A reboot will start the machine and allows us to cat the flag.
+This will drop us into the BIOS options. There we need to deselect `Device Manager` -> `Secure Boot Configuration` -> `Attempt Secure Boot`. A reboot will start the machine and allows us to cat the flag.
