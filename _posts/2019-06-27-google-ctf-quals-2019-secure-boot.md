@@ -85,7 +85,7 @@ Printing a backtrace reveals the following:
 ```
 
 I now went through all the call frames and looked for something interesting (in search for some main loop).
-At frame 5 I noticed the use of `0xdeadbeefdeadbeef` (suspicious). Frame 7 checks a functions result and, depending on the output, calls another function with the string "Blocked". Therefore I assumed `0x67dae50` to be our password check routine we are interested in.
+At frame 5 I noticed the use of `0xdeadbeefdeadbeef` (suspicious). Frame 7 checks a functions result and, depending on the output, calls another function with the string "Blocked" as an argument. Therefore I assumed `0x67dae50` to be our password check routine we are interested in.
 
 ```
 0x067d4d2f      e81c610000     call 0x67dae50              ;[1]
@@ -166,8 +166,11 @@ if __name__ == '__main__':
     r.send(pl + '\x0d')
     r.interactive()
 ```
-launching with socat:
+
+Launching with socat:
+
 ```
 socat /dev/stdin,rawer "SYSTEM:python2 secureboot.py"
 ```
+
 This will drop us into the BIOS options. There we need to deselect `Device Manager` -> `Secure Boot Configuration` -> `Attempt Secure Boot`. A reboot will start the machine and allows us to cat the flag.
