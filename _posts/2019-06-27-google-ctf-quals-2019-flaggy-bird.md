@@ -20,7 +20,7 @@ So far there is no clue about where the flag is hidden, and as the game is prett
 
 # Reversing
 
-I used jadx for the decompilation of the app (`jadx flaggybird.apk`). Now, with the (mostly) recovered source, we can start investigation. The `Checker.java` file was choosen as an interesting startpoint, as it contained AES decoding routines:
+I used jadx for the decompilation of the app (`jadx flaggybird.apk`). Now, with the (mostly) recovered source, we can start investigation. The `Checker.java` file was chosen as an interesting startpoint, as it contained AES decoding routines:
 ```java
 class Checker {
     private static final byte[] a = new byte[]{(byte) 46, (byte) 50, ...};
@@ -57,7 +57,7 @@ class Checker {
 Array a is a sha256 sum, b the IV and c contains encrypted data. We can see that if the native `nativeCheck` returns true for some `bArr`, it's sha256 is compared against a.
 Only if they match, decryption takes place. So we are looking for a decryption key with the sha256 sum of a. To find the decryption key, we need to find out where `bArr` comes from and what `nativeCheck` does.
 
-## Eggs and Arrays
+## Eggs And Arrays
 
 The only occurrence of the Checker class is in `f.java`. There are two interesting methods in this file and a lot of enums.
 
@@ -116,7 +116,7 @@ In our case EGG\_0 is translated to 0, EGG\_1 to 1, etc. Therefore the real "arr
 ```
 
 This function is called to modify elements of `l`. It assigns `l` at  position `i` the value of `i2` (as an "EGG_*" enum value, but translated back anyways later as we could see).
-Also, in the remaining part of the method, it is ensured that there are no more than 15 non zero eggs inside the `l` array and that every egg only occurs once! This reduces the possible keyspace further. For example the following keys would be possible:
+Also, in the remaining part of the method, it is ensured that there are no more than 15 nonzero eggs inside the `l` array and that every egg only occurs once! This reduces the possible keyspace further. For example the following keys would be possible:
 
 ```
 [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -148,7 +148,7 @@ bool C(char *bArr)
   return v4[15] < 16 && c != 0;
 }
 ```
-After some Java unwrapping `C` is called. `bArr` is compressed down to 16 Bytes by summing up two adjascent bytes, e.g. [x1, x2, x3, x4, ..., x32] -> [x1 + x2, x3 + x4, ..., x31 + x32]. Afterwards `M` is called. Apparently the goal is to keep `c == 1` during the execution of `M`.
+After some Java unwrapping `C` is called. `bArr` is compressed down to 16 Bytes by summing up two adjacent bytes, e.g. [x1, x2, x3, x4, ..., x32] -> [x1 + x2, x3 + x4, ..., x31 + x32]. Afterwards `M` is called. Apparently the goal is to keep `c == 1` during the execution of `M`.
 Also, we get another constraint for the possible keyspace with `x31 + x32 < 16`.
 Now we get to the main part of the nativeCheck. It is some recursive algorithm which I didn't bother to look at so closely. The only depency is a boolean array.
 
@@ -283,7 +283,7 @@ After less than 15 seconds we get a solution. It is also the only possible solut
 [9, 8, 7, 2, 11, 15, 13, 10, 6, 5, 14, 4, 3, 0, 12, 1]
 ```
 
-Now we know the summed up key which `M` expects. Bruteforcing all possible values and comparing their hashes againts the known hash should now be feasible. However I just used Z3 because I didn't want to write a bruteforcer.
+Now we know the summed up key which `M` expects. Bruteforcing all possible values and comparing their hashes against the known hash should now be feasible. However I just used Z3 because I didn't want to write a bruteforcer.
 The first constraints are the problem definition. The second one requires the key to contain exactly 15 nonzero values.
 Now we only have to loop until we find our key with the correct hash, constantly adding constraints to exclude already found, non-matching keys.
 
