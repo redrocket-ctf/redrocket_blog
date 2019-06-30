@@ -88,7 +88,7 @@ class f {
     }
 ```
 This method is responsible for calling the Checker. Before it does so, it constructs the `bArr`. The construction looks quite messy, but it just translates enum elements (like a.EGG\_0, etc) into a numerical representation.
-In our case EGG\_0 is translated to 0, EGG\_1 to 1, etc. Therefore the real "array of interest" for us is `l`. But what we know so far is, that the bytevalues for `bArr` are all in the range [0-15].
+In our case EGG\_0 is translated to 0, EGG\_1 to 1, etc. Therefore the real "array of interest" for us is `l`. But what we know so far is, that the bytevalues for `bArr` are all in the range [0-15], as the `a` array only contains 16 eggs.
 
 ```java
     public void a(int i, int i2) {
@@ -152,7 +152,7 @@ After some Java unwrapping `C` is called. `bArr` is compressed down to 16 Bytes 
 Also, we get another constraint for the possible keyspace with `x31 + x32 < 16`.
 Now we get to the main part of the nativeCheck. It is some recursive algorithm which I didn't bother to look at so closely. The only depency is a boolean array.
 
-straight outta IDA:
+Straight outta IDA:
 ```c
 int c = 1;
 int p = 0;
@@ -234,7 +234,9 @@ void M(char *dest, int len) {
 # Solving
 
 As it always takes some time for me to decompile algorithms properly (even tough this looked like a simple one) I decided just to write some small harness and use angr to compute a valid input array for `M`.
+
 The harness:
+
 ```c
 int main(int argc, char* argv[]) {
     char buf[16];
