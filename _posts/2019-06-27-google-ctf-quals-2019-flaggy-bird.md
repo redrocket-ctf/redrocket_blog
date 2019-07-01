@@ -251,7 +251,7 @@ int main(int argc, char* argv[]) {
 The handy part about doing it this way is, that we only need to define our constraints. I used the following:
 
 1. Last byte of compressed key < 16 (because of the check in `C`)
-2. A single byte must be < 30 (15 + 16 = 29 maximum possible value for a byte)
+2. A single byte must be < 30 (14 + 15 = 29 maximum possible value for a byte)
 3. Summed up, all bytes must equal 120 (1+2+3+...+15 = 120)
 
 The constraints from above still do allow for a few values we could have ruled out, but I just tried to keep them simple.
