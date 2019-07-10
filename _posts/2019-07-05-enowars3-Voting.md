@@ -18,9 +18,11 @@ The service was written in Python with an sqlite db and flask. You could registe
 
 
 ```html
+{% raw %}
 {% if session[2] == pollCreator and pollCreatorsNotes|length > 0 %}
 	<h3>Your private notes</h3>
 	<p>{{ pollCreatorsNotes }}</p>
+{% endraw %}
 ```
 
 The login function was really simple
