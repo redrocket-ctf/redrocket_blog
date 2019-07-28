@@ -1,6 +1,6 @@
 ---
 layout: post
-category: web
+category: Web
 title: Enowars3 - Voting
 tags: 
     - kauzu
