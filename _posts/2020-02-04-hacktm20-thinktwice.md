@@ -72,7 +72,7 @@ void sym.init_proc(void)
 
 closer look in asm:
 
-```java
+```nasm
 0x004008db      488b05be0720.  mov rax, qword [obj.stderr]
 0x004008e2      be00000000     mov esi, 0
 0x004008e7      4889c7         mov rdi, rax
