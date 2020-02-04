@@ -53,7 +53,7 @@ We can now continue working with the unpacked version.
 
 ## Reversing
 
-Initially my first thought was to just bruteforce byte by byte, as the input seemed to be transformed linear (i.e. leaving the first byte the same least to the same start of the output sequence).
+Initially my first thought was to just bruteforce byte by byte, as the input seemed to be transformed linear (i.e. leaving the first byte the same leads to the same start of the output sequence).
 But as the challenge was network based I was afraid of hitting a timeout before I could obain some result. So I started reversing the translation function. As the binary seemed to be handwritten in assembly this was a little painful.
 
 
