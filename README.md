@@ -14,7 +14,7 @@ You can build it with docker.
 
 Build containter (will take a while, you have to do this only once):
 
-`docker run --name red_blog -v "$PWD":/usr/src/app -w /usr/src/app ruby:2.5-buster bash -c gem install bundler jekyll && bundle install && bundle exec jekyll build`
+`docker run --name red_blog -v "$PWD":/usr/src/app -w /usr/src/app ruby:2.5-buster bash -c "gem install bundler jekyll && bundle install && bundle exec jekyll build"`
 
 Build the blog (should be fast):
 
