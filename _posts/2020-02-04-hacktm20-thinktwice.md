@@ -8,6 +8,9 @@ tags:
 
 A "kind of" blind pwning challenge, non-pic binary was provided (but not unusable out of the box because of some linker foo?).
 
+
+[Download](../assets/bin/hacktm_think_speak)
+
 ```
 user@KARCH ~ % nc 138.68.67.161 20004
  [*] Wise man said: 'Think twice before speaking once'

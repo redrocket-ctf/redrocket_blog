@@ -8,6 +8,9 @@ tags:
 
 Obey the rules was a simple pwning / shellcoding challenge at HackTM. Loading in r2 we see the following:
 
+
+[Download](../assets/bin/hacktm_obey_the_rules)
+
 ```
 user@KARCH ~/ctf/rules % r2 obey_the_rules
  -- Press any key to continue ...

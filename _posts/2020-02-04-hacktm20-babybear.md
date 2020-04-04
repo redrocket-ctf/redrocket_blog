@@ -8,6 +8,9 @@ tags:
 
 Babybear was a simple reversing challenge, and I solved it the hard way by reversing the whole thing.
 
+
+[Download](../assets/bin/hacktm_baby_bear)
+
 ```
 user@KARCH ~/ctf/bear % ./baby_bear 
 

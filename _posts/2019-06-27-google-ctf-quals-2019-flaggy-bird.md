@@ -10,6 +10,9 @@ tags:
 
 An Android APK challenge.
 
+
+[Download](../assets/bin/google_flaggybird.apk)
+
 ![image](http://blog.redrocket.club/assets/img/flaggy1.png)
 
 We have some kind of jump and run game, our character can walk left/right and jumping is possible as well. If we reach the red flag, the level is completed and a next level starts.
