@@ -22,4 +22,4 @@ Build the blog (should be fast):
 
 The blog is now saved in the \_site directory.
 
-Copy it to the website with: `scp _site/* redrocket.club:/var/www/blog.redrocket.club/`
+Copy it to the website with: `scp -r _site/* redrocket.club:/var/www/blog.redrocket.club/`
