@@ -11,7 +11,7 @@ tags:
 A x86\_64 qemu challenge. However, this time it is about getting it to boot up...
 
 
-[Download](../assets/bin/google_secureboot.zip)
+[Download](/assets/bin/google_secureboot.zip)
 
 ```
 .

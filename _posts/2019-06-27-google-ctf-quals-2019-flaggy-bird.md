@@ -11,7 +11,7 @@ tags:
 An Android APK challenge.
 
 
-[Download](../assets/bin/google_flaggybird.apk)
+[Download](/assets/bin/google_flaggybird.apk)
 
 ![image](http://blog.redrocket.club/assets/img/flaggy1.png)
 

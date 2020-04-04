@@ -9,7 +9,7 @@ tags:
 The challenge generates a mustache based on argv[1] input. Challenge authors supplied us with the target mustache, which we had to match.
 
 
-[Download](../assets/bin/hacktm_papa_bear)
+[Download](/assets/bin/hacktm_papa_bear)
 
 ```
 user@KARCH ~/ctf/papa % ./papa_bear AAAAA
