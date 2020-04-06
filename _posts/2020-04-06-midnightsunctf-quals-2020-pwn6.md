@@ -7,6 +7,8 @@ tags:
 ---
 
 A static, no PIE, canary, AMD64 Binary, intended for pwny racing. Solved by faking glibc's stdin/out FILE structures and writing a ROPchain into stack memory.
+
+
 [Download](/assets/bin/midnight_pwn6)
 
 
@@ -68,7 +70,7 @@ test
 testabcd
 ```
 
-However, we can't just overwrite the existing structure bit-by-bit, we would access corrupt pointers as stdin/out is accessed on every iteration of the loop. To solve this problem we swap a single bit inside of the stdout pointer (which is placed insied rw memory), so it points to some unused, zeroed out, space. Before we perform this "atomic stdout structure" swap of course we place a faked structure at this address.
+However, we can't just overwrite the existing structure bit-by-bit, we would access corrupt pointers as stdin/out is accessed on every iteration of the loop. To solve this problem we swap a single bit inside of the stdout pointer (which is placed inside rw memory as well), so it points to some unused, zeroed out, rw space. Before we perform this "atomic stdout structure" swap of course we place a faked structure at this address.
 
 ```python
 def fakestdout(a, b):
