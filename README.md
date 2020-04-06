@@ -23,3 +23,4 @@ Build the blog (should be fast):
 The blog is now saved in the \_site directory.
 
 Copy it to the website with: `scp -r _site/* root@redrocket.club:/var/www/blog.redrocket.club/`
+Or: `rsync -ru _site/* root@redrocket.club:/var/www/blog.redrocket.club/`
