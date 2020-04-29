@@ -1,6 +1,14 @@
+---
+layout: post
+category: Crypto
+title: PlaidCTF 2020 - sidhe
+tags: 
+    - rg
+---
+
 # SIDHE
 
-sidhe was a post-quatum crypto task of this year's PlaidCTF.
+Sidhe was a post-quatum crypto task of this year's PlaidCTF.
 
 ## The Vulnerable Server
 We're given network access to a server and it's source code:
