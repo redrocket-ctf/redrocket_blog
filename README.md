@@ -23,4 +23,14 @@ Build the blog (should be fast):
 The blog is now saved in the \_site directory.
 
 Copy it to the website with: `scp -r _site/* root@redrocket.club:/var/www/blog.redrocket.club/`
+
 Or: `rsync -ru _site/* root@redrocket.club:/var/www/blog.redrocket.club/`
+
+# View Live
+IF you want to see live changes locally to review your writeup, you can do a (once):
+
+`docker run --name red_blog_live -p 4000:4000 -v "$PWD":/usr/src/app -w /usr/src/app ruby:2.5-buster bash -c "gem install bundler jekyll && bundle install && bundle exec jekyll serve --host 0.0.0.0"`
+
+then start the container with `docker start -a red_blog_live`.
+
+You can now watch the blog at `http://localhost:4000`. Changes on files will be tracked and updated live.
