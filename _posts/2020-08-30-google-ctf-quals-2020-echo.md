@@ -9,7 +9,7 @@ tags:
 # Challenge overwiew
 
 The challenge itself was an "echo service" written in C++, listening for connections on localhost. To interact with it on the remote end, it was necessary to upload a binary to the launcher service, which executed the received binary "in memory".
-The echo service itself was running as root, therefore we neet to pwn it to get the flag. The functionality of the service was simple:
+The echo service itself was running as root, therefore we need to pwn it to get the flag. The functionality of the service was simple:
 
 1. Receive and store data in a std::string until a newline char occurred
 2. Echo the data back
@@ -116,7 +116,10 @@ int main() {
 }
 ```
 To be honest, I don't know HOW this write can happen, it is somehow working on c2's fd, but at the same time accesses c1's reading buffer. I still might not fully understand C++ Vectors / Iterators internals. Will investigate this later, but during the CTF noone cares, as long as the exploitation primitive is stable, right? And as I could write into freed tcache chunks, I had a powerful primitive by corrupting tcache freelist pointers.
+
+
 This is basically an arbitrary write primitive I will make heavy use of (aka tcache poisoning), and one should be familiar with it. [Tcache poisoning Example](https://github.com/shellphish/how2heap/blob/master/glibc_2.26/tcache_poisoning.c)
+
 At least it was instant arbitrary write back then when the Google CTF took place, there now is a new mitigation introduced (at least on my distro) to prevent this happening that easily [tcache/fastbin Safe-Linking](https://patchwork.ozlabs.org/project/glibc/patch/CAA=iMULaUiUjsx2myeMRvEmgQav915HWmqG5iz3_P9EeMdW_Yw@mail.gmail.com/).
 
 # Leaking Addresses
@@ -151,7 +154,7 @@ As the Heap was now derandomized, next up I wanted to leak some libc addresses. 
 3. Writing a newline to the 0x30 chunk will return those leaks
 4. Read them in and calculate libc base
 
-The heap state after step 2 is shown below. The huge chunk (green) is freed, and the freeing process leaked addresses into the red 0x30 chunk.
+The heap state after step 2 is shown below. The huge chunk (green) is freed, and doing so leaked addresses into the red 0x30 chunk, which is still under my control.
 
 ![image](http://blog.redrocket.club/assets/img/echo_leak3.png)
 
