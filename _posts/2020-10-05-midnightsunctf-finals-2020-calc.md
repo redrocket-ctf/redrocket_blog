@@ -9,9 +9,10 @@ tags:
 # Challenge Description / Setup
 
 ```
-During some renovations, we found an ancient computer with this VM hidden behind a wall. We believe it is the earliest example of networked computation. (QEMU with PCNET network)
+During some renovations, we found an ancient computer with this VM hidden behind a wall.
+We believe it is the earliest example of networked computation. (QEMU with PCNET network)
 ```
-[Download](/assets/bin/floppy.img)
+[Download](/assets/bin/midnight_floppy.img)
 
 So we got a DOS floppy image. The Image contained the following files:
 ```
@@ -35,7 +36,7 @@ So we got a DOS floppy image. The Image contained the following files:
 Autoexec would start DHCP to run a DHCP server, then the challenge "calc.exe" is executed. It turns out that [mTCP](http://www.brutman.com/mTCP/) was used as a TCP stack. Calc.exe would then listen on UDP port 8888 for simple equations of the format `number operand number` and echo the result back (via network).
 
 
-First I spent some time getting QEMU and NAT working. I have no clue of networking and just followed Instructions at [https://wiki.qemu.org/Documentation/Networking/NAT]. Finally I ended up using the following combination:
+First I spent some time getting QEMU and NAT working. I have no clue of networking and just followed Instructions at [https://wiki.qemu.org/Documentation/Networking/NAT](https://wiki.qemu.org/Documentation/Networking/NAT). Finally I ended up using the following combination:
 
 `sudo qemu-system-i386 -drive file=floppy.img,if=floppy,format=raw -m 64 -boot a -netdev tap,id=mynet0 -device pcnet,netdev=mynet0 --nographic`
 
@@ -136,7 +137,7 @@ r.send(b'+' * 24 + struct.pack(
 
 # Shellcode
 
-Now it is "easy". I used the 0x21 DOS intterrupt [https://www.beck-ipc.com/api_files/scxxx/dosemu.htm] to open the flag file, and read the flag into memory. Next I prepared the arguments to call the already existing `int8_t Udp::sendUdp( IpAddr_t host, uint16_t srcPort, uint16_t dstPort, uint16_t payloadLen, uint8_t *data, uint8_t preAlloc)` function, to echo back the flag via udp. I filled out all the important arguments with static data (static ip address, 1337 src / dst port), and let wireshark listen for the resulting UDP packet. Less work for me :)
+Now it is "easy". I used the 0x21 DOS intterrupt [https://www.beck-ipc.com/api_files/scxxx/dosemu.htm](https://www.beck-ipc.com/api_files/scxxx/dosemu.htm) to open the flag file, and read the flag into memory. Next I prepared the arguments to call the already existing `int8_t Udp::sendUdp( IpAddr_t host, uint16_t srcPort, uint16_t dstPort, uint16_t payloadLen, uint8_t *data, uint8_t preAlloc)` function, to echo back the flag via udp. I filled out all the important arguments with static data (static ip address, 1337 src / dst port), and let wireshark listen for the resulting UDP packet. Less work for me :)
 
 ```asm
 org 0
