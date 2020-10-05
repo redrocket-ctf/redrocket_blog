@@ -116,7 +116,7 @@ void __fastcall_member parsepkt(char *input)
   return;
 }
 ```
-Now the presented decompiled source looks quite nice, but for this I had to teach Ghidra some new 16bit calling conventions (like microsoft 16bit fastcall), as mTCP was written in C++. This worked surprisingly easy, some existing specifications can be found in `Ghidra/Processors/x86/data/languages/x86-16.cspec`. I think I did't quite get them right, but sufficiently well to understand what's going on. It should be `AX, BX, CX, DX, ES, stack...`, return values in `AX, DX`.
+Now the presented decompiled source looks quite nice, but for this I had to teach Ghidra some new 16bit calling conventions (like microsoft 16bit fastcall it seems). This worked surprisingly easy, some existing specifications can be modified in `Ghidra/Processors/x86/data/languages/x86-16.cspec`. I think I did't quite get them right, but sufficiently well to understand what's going on. It should be `AX, BX, CX, DX, ES, stack...`, return values in `AX, DX`.
 
 # Debugging
 
