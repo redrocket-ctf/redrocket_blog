@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Pwn
-title: Midnightsun CTF 2020 - calc.exe
+title: MidnightsunCTF 2020 - calc.exe
 tags: 
     - kowu
 ---
