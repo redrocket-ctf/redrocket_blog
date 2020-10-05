@@ -120,7 +120,7 @@ To be honest, I don't know HOW this write can happen, it is somehow working on c
 
 This is basically an arbitrary write primitive I will make heavy use of (aka tcache poisoning), and one should be familiar with it. [Tcache poisoning Example](https://github.com/shellphish/how2heap/blob/master/glibc_2.26/tcache_poisoning.c)
 
-At least it was instant arbitrary write back then when the Google CTF took place, there now is a new mitigation introduced (at least on my distro) to prevent this happening that easily [tcache/fastbin Safe-Linking](https://patchwork.ozlabs.org/project/glibc/patch/CAA=iMULaUiUjsx2myeMRvEmgQav915HWmqG5iz3_P9EeMdW_Yw@mail.gmail.com/).
+At least it was instant arbitrary write back then when the Google CTF took place, there was a new mitigation introduced recently (at least on my distro) to prevent this from happening that easily [tcache/fastbin Safe-Linking](https://patchwork.ozlabs.org/project/glibc/patch/CAA=iMULaUiUjsx2myeMRvEmgQav915HWmqG5iz3_P9EeMdW_Yw@mail.gmail.com/).
 
 # Leaking Addresses
 
