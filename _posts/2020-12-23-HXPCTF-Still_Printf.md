@@ -148,5 +148,6 @@ for i in xrange(4096):
   print(data)
   io.interactive()
  except:
+  io.close()
   continue
 ``` 
