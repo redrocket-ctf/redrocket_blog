@@ -61,7 +61,7 @@ $15 -> $41 was the closest one that just 'perfectly' fits into the length of 0x2
 ```
 
 # Solution
-My solution includes guessing ( ( stack_address&0xfff0 ) >> 4 ) byte value. The possibility is 1 / 4096.
+My solution includes guessing ( ( stack_address&0xfff0 ) >> 4 ) 12 bit value. The possibility is 1 / 4096.
 
 We need to make this into multiple tries to get the code execution. printf calls vfprintf internally. By overwriting the return address of printf we can make this into multiple shots. But the challenging part is the max len of input, which is 0x2f bytes, but turns out that it's all we need to get code execution.
 
