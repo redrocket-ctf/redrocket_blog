@@ -6,9 +6,18 @@ tags:
     - lukas2511
 ---
 
-EntrAPI was a task of the ALLES! CTF 2021.
+EntrAPI was a task of the ALLES! CTF 2021:
 
-It provided an API taking a path to a file, a start position and an end position, and gave the number of different characters in the giving range as result.
+```
+A very simple stegano tool that estimates the entropy of sections of a file by counting unique bytes in a range. Here's a snippet of the Dockerfile to get you started:
+
+COPY main.js index.html flag /
+RUN deno cache main.js
+EXPOSE 1024
+CMD deno run -A main.js
+```
+
+It provided an http based API taking a path to a file, a start position and an end position, and gave the number of different characters in the giving range as result.
 
 So e.g. with a flag in the format `ALLES!{....}` giving path /flag with start 0 and end 5 would result in 4, as the `L` is used twice.
 
